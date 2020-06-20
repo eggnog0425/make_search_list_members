@@ -18,7 +18,8 @@ twitter = OAuth1Session(consumer_key, consumer_secret,
                         access_token, access_secret)
 
 # GETパラメータの生成
-params = {'list_id': config_ini['list']['id']}
+params = {'list_id': config_ini['get_parameters']['list_id'],
+          'count': config_ini['get_parameters']['count']}
 response = twitter.get(end_point, params=params)
 
 if response.status_code != 200:
