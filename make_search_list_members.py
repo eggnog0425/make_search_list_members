@@ -28,11 +28,21 @@ if response.status_code != 200:
 
 members = response.json()['users']
 
+search_word = ''
+first = True
+for member in members:
+    add_word = '{}from:{}'
+    if first:
+        search_word += add_word.format('', member['screen_name'])
+        first = False
+        continue
+
+    add_word = add_word.format(' OR ', member['screen_name'])
+    length = len(search_word + add_word)
+    if int(config_ini['search_word']['max_length']) < length:
+        print('search word is too long!!!!')
+        break
+    search_word += add_word
+
 with open(config_ini['output_file']['path'], mode='w') as f:
-    first = True
-    for member in members:
-        if first:
-            first = False
-        else:
-            f.write(' OR ')
-        f.write('from:' + member['screen_name'])
+    f.write(search_word)
